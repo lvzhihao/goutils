@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"strconv"
+	"strings"
 )
 
 func ToFloat(v interface{}) float64 {
@@ -48,4 +49,10 @@ func ToInt(v interface{}) int64 {
 	} else {
 		return int64(i)
 	}
+}
+
+func ToPrice(f float64) int64 {
+	s := strings.Replace(fmt.Sprintf("%.02f", f), ".", "", 1)
+	rst, _ := strconv.ParseInt(s, 10, 64)
+	return rst
 }

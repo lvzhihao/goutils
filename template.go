@@ -2,6 +2,7 @@ package goutils
 
 import (
 	"html/template"
+	"strconv"
 	"strings"
 )
 
@@ -15,6 +16,19 @@ var (
 		},
 		"ToLower": func(s interface{}) string {
 			return strings.ToLower(ToString(s))
+		},
+		"Price": func(v int64) interface{} {
+			str := strconv.FormatInt(v, 10)
+			len := len(str)
+			return str[:len-2] + "." + str[len-2:]
+		},
+		"PriceInt": func(v int64) interface{} {
+			str := strconv.FormatInt(v, 10)
+			len := len(str)
+			return str[:len-2]
+		},
+		"unescape": func(s string) interface{} {
+			return template.HTML(s)
 		},
 	}
 )
