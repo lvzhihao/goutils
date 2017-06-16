@@ -2,10 +2,7 @@ package goutils
 
 import (
 	"html/template"
-	"io"
 	"strings"
-
-	"github.com/labstack/echo"
 )
 
 var (
@@ -26,20 +23,9 @@ func NewTemplate(name, patter string) *template.Template {
 	return template.Must(template.New(name).Funcs(TemplateHelpers).ParseGlob(patter))
 }
 
-type EchoTemplate struct {
-	templates *template.Template
-}
-
-func (t *EchoTemplate) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-	return t.templates.ExecuteTemplate(w, name, data)
-}
-
-func NewEchoRenderer(name, patter string) *EchoTemplate {
-	return &EchoTemplate{
-		templates: NewTemplate(name, patter),
-	}
-}
-
+/*
+ * template helpers
+ */
 func IntArithmetic(v1, v2 interface{}, t string) (result int64) {
 	switch t {
 	case "+":
