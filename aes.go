@@ -54,8 +54,8 @@ func AesCBCEncrypt(key []byte, text string) (string, error) {
 		return "", err
 	}
 
-	cfb := cipher.NewCFBEncrypter(block, iv)
-	cfb.XORKeyStream(ciphertext[aes.BlockSize:], []byte(msg))
+	cbc := cipher.NewCBCEncrypter(block, iv)
+	cbc.CryptBlocks(ciphertext[aes.BlockSize:], msg)
 	finalMsg := RemoveBase64Padding(base64.URLEncoding.EncodeToString(ciphertext))
 	return finalMsg, nil
 }
@@ -78,8 +78,8 @@ func AesCBCDecrypt(key []byte, text string) (string, error) {
 	iv := decodedMsg[:aes.BlockSize]
 	msg := decodedMsg[aes.BlockSize:]
 
-	cfb := cipher.NewCFBDecrypter(block, iv)
-	cfb.XORKeyStream(msg, msg)
+	cbc := cipher.NewCBCDecrypter(block, iv)
+	cbc.CryptBlocks(msg, msg)
 
 	unpadMsg, err := PKCS5PaddingUnpad(msg)
 	if err != nil {
