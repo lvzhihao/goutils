@@ -87,3 +87,34 @@ func NewEchoRenderer(name, patter string) *EchoTemplate {
 func (t *EchoTemplate) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
 	return t.templates.ExecuteTemplate(w, name, data)
 }
+
+func EchoCtxQueryNullString(ctx echo.Context, key string) (ret *NullString) {
+	ret = &NullString{
+		String: "",
+		Valid:  false,
+	}
+	v := ctx.QueryParams()
+	if _, ok := v[key]; !ok {
+		return
+	}
+	ret.String = v.Get(key)
+	ret.Valid = true
+	return
+}
+
+func EchoCtxFormNullString(ctx echo.Context, key string) (ret *NullString) {
+	ret = &NullString{
+		String: "",
+		Valid:  false,
+	}
+	v, err := ctx.FormParams()
+	if err != nil {
+		return
+	}
+	if _, ok := v[key]; !ok {
+		return
+	}
+	ret.String = v.Get(key)
+	ret.Valid = true
+	return
+}
