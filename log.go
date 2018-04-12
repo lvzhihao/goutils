@@ -2,6 +2,7 @@ package goutils
 
 import (
 	"log"
+	"os"
 
 	"go.uber.org/zap"
 )
@@ -25,7 +26,12 @@ type LoggerInterface interface {
 }
 
 func DefaultLogger() *Logger {
-	logger, _ := zap.NewProduction()
+	var logger *zap.Logger
+	if os.Getenv("DEBUG") == "true" {
+		logger, _ = zap.NewDevelopment()
+	} else {
+		logger, _ = zap.NewProduction()
+	}
 	return ZapLogger(logger)
 }
 
